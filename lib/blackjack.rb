@@ -24,10 +24,24 @@ class Game
   def request_player_input
     puts "The dealer has a #{@dealer_hand.first.value}. You have a #{@player_hand.first.value} and a #{@player_hand[1].value}. Would you like to Hit or Hold?"
     selection = gets
+    puts selection
+    validate_selection(selection)
+  end
+
+  def validate_selection(selection)
+    if selection.downcase.chomp == "hit"
+      # add one to player hand
+    elsif selection.downcase.chomp == "hold"
+      # end player turn
+    else  
+      puts "Invalid request. Please type 'hit' or 'hold'. "
+      selection = gets
+      validate_selection(selection)
+    end
   end
 
   def finish_turn
-
+    
   end
 
   def winner?
