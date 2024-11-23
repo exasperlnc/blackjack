@@ -11,7 +11,6 @@ class Game
     @dealer_hand = []
     @player_hand = []
     @dealer_hidden = []
-    @dealer_total = 0
   end
 
   def start
@@ -41,10 +40,12 @@ class Game
     end
   end
 
-  def finish_turn
-    # dealer hits until val is >= 17 
-    @dealer_total += @dealer_hand.first.value + @dealer_hidden.first.value
-    puts @dealer_total
+  def dealer_turn
+    dealer_total = self.calculate_dealer_total
+    while dealer_total < 17
+      card = @cards.pop
+      dealer_total += card.value
+    end
   end
 
   def winner?
@@ -52,6 +53,8 @@ class Game
     dealer_total = self.calculate_dealer_total
     if player_total > 21
       puts "#{player_total}?! Busted!"
+    elsif dealer_total > 21
+      puts "The house busts with a #{dealer_total}!"
     elsif player_total > dealer_total
       puts "#{player_total} beats #{dealer_total}. You win!"
     elsif player_total == dealer_total 
@@ -76,6 +79,7 @@ class Game
     end
     dealer_total 
   end
+
   def create_cards
     cards = []
 
@@ -90,7 +94,7 @@ class Game
   end
 
   def shuffle
-    return @cards
+    @cards.shuffle!
   end
 
   def dealer_draw
@@ -116,7 +120,7 @@ game.start
 # allow the player to hit or hold
 game.request_player_input
 # let the computer flip over its second card and draw until it hits 17
-game.finish_turn
+game.dealer_turn
 # determine the winner
 game.winner?
 # ruby ./lib/blackjack.rb  
