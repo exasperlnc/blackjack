@@ -11,6 +11,7 @@ class Game
     @dealer_hand = []
     @player_hand = []
     @dealer_hidden = []
+    @dealer_total = 0
   end
 
   def start
@@ -41,13 +42,40 @@ class Game
   end
 
   def finish_turn
-    
+    # dealer hits until val is >= 17 
+    @dealer_total += @dealer_hand.first.value + @dealer_hidden.first.value
+    puts @dealer_total
   end
 
   def winner?
-
+    player_total = self.calculate_player_total
+    dealer_total = self.calculate_dealer_total
+    if player_total > 21
+      puts "#{player_total}?! Busted!"
+    elsif player_total > dealer_total
+      puts "#{player_total} beats #{dealer_total}. You win!"
+    elsif player_total == dealer_total 
+      puts "Tie game. (Would be a push if you're gambling)"
+    else 
+      puts "#{dealer_total} beats #{player_total}. You lose! Loser."
+    end 
+  end
+  
+  def calculate_player_total
+    player_total = 0
+    @player_hand.each do |card|
+      player_total += card.value
+    end 
+    player_total
   end
 
+  def calculate_dealer_total
+    dealer_total = @dealer_hidden.first.value
+    @dealer_hand.each do |card|
+      dealer_total += card.value
+    end
+    dealer_total 
+  end
   def create_cards
     cards = []
 
